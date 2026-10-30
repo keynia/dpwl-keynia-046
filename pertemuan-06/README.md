@@ -159,3 +159,23 @@ http://localhost/dpwl-2522500046/index.php/penyewa/profil
 ### Kesimpulan
 
 Fitur profil penyewa berhasil diuji. Sistem dapat menampilkan dan memperbarui data profil, melakukan validasi terhadap input yang tidak valid, serta membatasi akses halaman profil hanya untuk penyewa yang sudah login.
+
+## G.5. Pengujian Penghilangan index.php pada URL Aplikasi
+
+Pada tahap ini dilakukan pengujian untuk memastikan aplikasi dapat diakses tanpa menuliskan `index.php` pada URL. Pengujian juga dilakukan untuk memastikan navigasi dan fitur aplikasi tetap berjalan setelah perubahan route `default_controller`.
+
+Pengujian dilakukan dengan membuka alamat:
+
+http://localhost/dpwl-2522500046
+
+### Hasil Pengujian
+
+- **Akses halaman utama:** Berhasil. Aplikasi dapat dibuka melalui URL tanpa menuliskan `index.php`.
+- **Navigasi menu:** Berhasil. Menu-menu yang tersedia dapat dibuka dan URL tidak lagi menampilkan `index.php`.
+- **Halaman katalog:** Berhasil. Halaman katalog kendaraan dapat diakses melalui halaman utama aplikasi.
+- **Fitur aplikasi:** Fitur yang telah dibuat sebelumnya tetap dapat dijalankan setelah perubahan konfigurasi URL.
+- **Route default_controller:** Berhasil. Halaman katalog menjadi halaman utama aplikasi setelah `default_controller` diarahkan ke `Katalog_controller`.
+
+### Kesimpulan
+
+Penghilangan `index.php` pada URL aplikasi berhasil diterapkan. Aplikasi dapat diakses menggunakan URL yang lebih sederhana, navigasi tetap berjalan, dan fitur-fitur sebelumnya tetap dapat digunakan tanpa galat.

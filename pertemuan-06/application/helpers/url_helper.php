@@ -1,19 +1,23 @@
 <?php
-function base_url(string $uri = ''): string
-{
+
+if (!function_exists('base_url')) {
+  function base_url(string $uri = ''): string
+  {
     global $config;
-
-    $base = rtrim($config['base_url'], '/') . '/';
-
-    return $uri === '' ? $base : $base . ltrim($uri, '/');
+    $base = rtrim($config['base_url'], '/');
+    return $uri === '' ? $base : $base . '/' . ltrim($uri, '/');
+  }
 }
 
-function site_url(string $uri = ''): string
-{
+if (!function_exists('site_url')) {
+  function site_url(string $uri = ''): string
+  {
     global $config;
-
-    $url = rtrim($config['base_url'], '/') . '/'
-    . trim($config['index_page'], '/');
+    $base = rtrim($config['base_url'], '/');
+    $indexPage = trim($config['index_page'], '/');
+    $path = $indexPage === '' ? '' : '/' . $indexPage;
+    $url = $base . $path;
 
     return $uri === '' ? $url : $url . '/' . ltrim($uri, '/');
+  }
 }
