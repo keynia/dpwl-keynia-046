@@ -418,4 +418,39 @@ class Mobil_controller extends Controller
             }
         }
     }
+
+    public function hapus(string $noPlat): void
+{
+require_admin_login();
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+http_response_code(405);
+exit('Metode request tidak diizinkan.');
+}
+$noPlat = rawurldecode($noPlat);
+$mobil = $this->model->findByNoPlat($noPlat);
+if ($mobil === null) {
+set_flash_message('danger', 'Data kendaraan tidak ditemukan.');
+header('Location: ' . site_url('admin/mobil'));
+exit;
+}
+try {
+$success = $this->model->delete($noPlat);
+} catch (Throwable $e) {
+$success = false;
+}
+if (!$success) {
+set_flash_message('danger', 'Data kendaraan gagal dihapus.');
+header('Location: ' . site_url('admin/mobil'));
+exit;
+}
+$this->hapusFotoBaru(array_filter([
+$mobil['ft_depan'] ?? null,
+$mobil['ft_blkg'] ?? null,
+$mobil['ft_interior'] ?? null,
+]));
+set_flash_message('success', 'Data kendaraan berhasil dihapus.');
+header('Location: ' . site_url('admin/mobil'));
+exit;
+}
+
 }

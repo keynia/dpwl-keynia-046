@@ -154,3 +154,68 @@ git log -1 --oneline
 
 Commit digunakan untuk mencatat perubahan fitur UPDATE, sedangkan push digunakan untuk mengirim perubahan ke repositori GitHub.
 
+
+# F4 - Implementasi DELETE Data Kendaraan
+
+## 1. Deskripsi
+Pada tahap ini dilakukan pengembangan fitur DELETE untuk menghapus data kendaraan dari aplikasi DPWL menggunakan konsep MVC (Model, View, Controller).
+
+Fitur ini digunakan oleh admin untuk menghapus data kendaraan berdasarkan nomor plat dari tabel `t_mobil`.
+
+## 2. Implementasi DELETE Data Kendaraan
+
+Fitur DELETE memungkinkan admin menghapus kendaraan melalui halaman Manajemen Kendaraan.
+
+Proses penghapusan meliputi:
+- Mengambil data kendaraan berdasarkan nomor plat.
+- Memeriksa apakah data kendaraan tersedia.
+- Menghapus data kendaraan dari database.
+- Menghapus foto depan, belakang, dan interior yang terkait.
+- Menampilkan pesan berhasil atau gagal.
+- Mengarahkan kembali ke halaman Manajemen Kendaraan.
+
+Proses penghapusan menggunakan metode POST agar penghapusan tidak dilakukan hanya dengan membuka URL.
+
+## 3. Perubahan Berkas
+
+### a. Mobil_model.php
+Menambahkan method `delete()` untuk menghapus data kendaraan dari tabel `t_mobil` berdasarkan nomor plat menggunakan prepared statement.
+
+### b. Mobil_controller.php
+Menambahkan method `hapus()` untuk memproses permintaan penghapusan, memeriksa data kendaraan, memanggil method delete() pada Model, dan menghapus foto kendaraan setelah data berhasil dihapus.
+
+### c. mobil_view.php
+Menambahkan atau menyesuaikan tombol Hapus pada daftar kendaraan agar admin dapat melakukan penghapusan data kendaraan.
+
+### d. routes.php
+Menambahkan route untuk memproses penghapusan kendaraan berdasarkan nomor plat.
+
+## 4. Hasil Pengujian
+
+Pengujian fitur DELETE meliputi:
+1. Menghapus kendaraan melalui tombol Hapus.
+2. Memastikan data kendaraan terhapus dari halaman Manajemen Kendaraan.
+3. Memastikan data kendaraan terhapus dari tabel `t_mobil`.
+4. Memeriksa penghapusan foto kendaraan pada folder `assets/uploads/mobil/`.
+5. Memastikan aplikasi memberikan pesan jika data tidak ditemukan atau penghapusan gagal.
+6. Memastikan fitur INSERT, READ, dan UPDATE tetap berfungsi.
+
+Catatan: Hasil setiap pengujian dicatat sesuai kondisi aktual aplikasi.
+
+## 5. Kesimpulan
+
+Fitur DELETE dikembangkan untuk melengkapi pengelolaan data kendaraan pada aplikasi DPWL. Dengan fitur ini, admin dapat menghapus data kendaraan beserta foto yang terkait melalui penerapan konsep MVC.
+
+## 6. Git dan Version Control
+
+Perubahan proyek dicatat menggunakan Git dengan perintah:
+
+```bash
+git status
+git add .
+git commit -m "P5 implementasi DELETE data kendaraan"
+git push
+git log -1 --oneline
+```
+
+Commit digunakan untuk mencatat perubahan fitur DELETE, sedangkan push digunakan untuk mengirim perubahan ke repositori GitHub.

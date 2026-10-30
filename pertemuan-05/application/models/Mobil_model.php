@@ -143,4 +143,13 @@ $stmt->close();
 return $success;
 }
 
+public function delete(string $noPlat): bool
+{
+$stmt = $this->db->prepare("DELETE FROM t_mobil WHERE no_plat = ?");
+$stmt->bind_param('s', $noPlat);
+$success = $stmt->execute();
+$stmt->close();
+return $success;
+}
+
 }
