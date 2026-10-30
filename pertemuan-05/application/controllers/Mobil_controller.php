@@ -4,7 +4,6 @@
 class Mobil_controller extends Controller
 {
     private Mobil_model $model;
-
     private string $uploadDir;
 
     public function __construct()
@@ -22,190 +21,328 @@ class Mobil_controller extends Controller
     // Menampilkan daftar kendaraan
     public function index()
     {
+        require_admin_login();
+
         $data['mobil'] = $this->model->getAll();
         $data['username'] = $_SESSION['admin_username'] ?? '';
 
         $this->view('admin/mobil_view', $data);
     }
 
-    // Menampilkan halaman dan memproses tambah kendaraan
+    // Menampilkan dan memproses tambah kendaraan
     public function tambah()
     {
+        require_admin_login();
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $uploadedFiles = [];
 
             try {
                 $data = [
-                    'no_plat'       => trim($_POST['no_plat'] ?? ''),
-                    'nm_mobil'      => trim($_POST['nm_mobil'] ?? ''),
-                    'nkursi'        => $_POST['nkursi'] ?? '',
-                    'nbagasi'       => $_POST['nbagasi'] ?? '',
-                    'jns_mobil'     => $_POST['jns_mobil'] ?? '',
-                    'transmisi'     => $_POST['transmisi'] ?? '',
-                    'thn_buat'      => $_POST['thn_buat'] ?? '',
-                    'hrg_hari'      => $_POST['hrg_hari'] ?? '',
-                    'cttn_unit'     => trim($_POST['cttn_unit'] ?? ''),
-                    'status_unit'   => $_POST['status_unit'] ?? '',
-                    'ft_depan'      => null,
-                    'ft_blkg'       => null,
-                    'ft_interior'   => null
+                    'no_plat' => trim($_POST['no_plat'] ?? ''),
+                    'nm_mobil' => trim($_POST['nm_mobil'] ?? ''),
+                    'nkursi' => filter_var(
+                        $_POST['nkursi'] ?? null,
+                        FILTER_VALIDATE_INT
+                    ),
+                    'nbagasi' => filter_var(
+                        $_POST['nbagasi'] ?? null,
+                        FILTER_VALIDATE_INT
+                    ),
+                    'jns_mobil' => $_POST['jns_mobil'] ?? '',
+                    'transmisi' => $_POST['transmisi'] ?? '',
+                    'thn_buat' => filter_var(
+                        $_POST['thn_buat'] ?? null,
+                        FILTER_VALIDATE_INT
+                    ),
+                    'ft_depan' => null,
+                    'ft_blkg' => null,
+                    'ft_interior' => null,
+                    'hrg_hari' => filter_var(
+                        $_POST['hrg_hari'] ?? null,
+                        FILTER_VALIDATE_INT
+                    ),
+                    'cttn_unit' => trim($_POST['cttn_unit'] ?? ''),
+                    'status_unit' => $_POST['status_unit'] ?? ''
                 ];
 
-                // Validasi data wajib
-                if (
-                    $data['no_plat'] === '' ||
-                    $data['nm_mobil'] === '' ||
-                    $data['nkursi'] === '' ||
-                    $data['nbagasi'] === '' ||
-                    $data['thn_buat'] === '' ||
-                    $data['hrg_hari'] === ''
-                ) {
-                    throw new RuntimeException(
-                        'Semua data wajib harus diisi.'
-                    );
+                $error = $this->validateMobilInput($data);
+
+                if ($error !== null) {
+                    throw new RuntimeException($error);
                 }
 
-                if (strlen($data['no_plat']) > 15) {
-                    throw new RuntimeException(
-                        'Nomor plat maksimal 15 karakter.'
-                    );
-                }
-
-                if (strlen($data['nm_mobil']) > 40) {
-                    throw new RuntimeException(
-                        'Nama mobil maksimal 40 karakter.'
-                    );
-                }
-
-                if (
-                    !filter_var($data['nkursi'], FILTER_VALIDATE_INT) ||
-                    $data['nkursi'] < 1 ||
-                    $data['nkursi'] > 25
-                ) {
-                    throw new RuntimeException(
-                        'Jumlah kursi harus antara 1 sampai 25.'
-                    );
-                }
-
-                if (
-                    !filter_var($data['nbagasi'], FILTER_VALIDATE_INT) ||
-                    $data['nbagasi'] < 0 ||
-                    $data['nbagasi'] > 30
-                ) {
-                    throw new RuntimeException(
-                        'Jumlah bagasi harus antara 0 sampai 30.'
-                    );
-                }
-
-                // Validasi jenis mobil
-                if (!in_array(
-                    $data['jns_mobil'],
-                    ['SUV', 'MPV', 'City Car'],
-                    true
-                )) {
-                    throw new RuntimeException(
-                        'Jenis mobil tidak valid.'
-                    );
-                }
-
-                // Validasi transmisi
-                if (!in_array(
-                    $data['transmisi'],
-                    ['AT', 'MT'],
-                    true
-                )) {
-                    throw new RuntimeException(
-                        'Transmisi tidak valid.'
-                    );
-                }
-
-                // Validasi tahun pembuatan
-                if (
-                    !filter_var($data['thn_buat'], FILTER_VALIDATE_INT) ||
-                    $data['thn_buat'] < 1901 ||
-                    $data['thn_buat'] > 2155
-                ) {
-                    throw new RuntimeException(
-                        'Tahun pembuatan tidak valid.'
-                    );
-                }
-
-                // Validasi harga sewa
-                if (
-                    !filter_var($data['hrg_hari'], FILTER_VALIDATE_INT) ||
-                    $data['hrg_hari'] < 1 ||
-                    $data['hrg_hari'] > 8388607
-                ) {
-                    throw new RuntimeException(
-                        'Harga sewa tidak valid.'
-                    );
-                }
-
-                if (strlen($data['cttn_unit']) > 500) {
-                    throw new RuntimeException(
-                        'Catatan maksimal 500 karakter.'
-                    );
-                }
-
-                // Validasi status kendaraan
-                if (!in_array(
-                    $data['status_unit'],
-                    ['tersedia', 'disewa', 'tidaktersedia'],
-                    true
-                )) {
-                    throw new RuntimeException(
-                        'Status kendaraan tidak valid.'
-                    );
-                }
-
-                // Upload foto kendaraan
+                // Upload foto depan
                 $data['ft_depan'] = $this->uploadFoto('ft_depan');
                 if ($data['ft_depan'] !== null) {
                     $uploadedFiles[] = $data['ft_depan'];
                 }
 
+                // Upload foto belakang
                 $data['ft_blkg'] = $this->uploadFoto('ft_blkg');
                 if ($data['ft_blkg'] !== null) {
                     $uploadedFiles[] = $data['ft_blkg'];
                 }
 
+                // Upload foto interior
                 $data['ft_interior'] = $this->uploadFoto('ft_interior');
                 if ($data['ft_interior'] !== null) {
                     $uploadedFiles[] = $data['ft_interior'];
                 }
 
-                // Simpan ke database
+                // Simpan data ke database
                 if (!$this->model->create($data)) {
                     throw new RuntimeException(
                         'Data mobil gagal disimpan.'
                     );
                 }
 
-                // Berhasil, kembali ke daftar mobil
+                set_flash_message(
+                    'success',
+                    'Data mobil berhasil ditambahkan.'
+                );
+
                 header('Location: ' . site_url('admin/mobil'));
                 exit;
 
             } catch (Throwable $e) {
-                // Hapus foto jika penyimpanan gagal
                 $this->hapusFotoBaru($uploadedFiles);
 
-                $dataView['username'] =
-                    $_SESSION['admin_username'] ?? '';
-
-                $dataView['error'] = $e instanceof RuntimeException
-                    ? $e->getMessage()
-                    : 'Terjadi kesalahan saat menyimpan data. Pastikan nomor plat belum digunakan.';
+                $dataView = [
+                    'username' => $_SESSION['admin_username'] ?? '',
+                    'error' => $e->getMessage()
+                ];
 
                 $this->view('admin/mobil_tambah', $dataView);
                 return;
             }
         }
 
-        // Jika GET, tampilkan form tambah mobil
-        $data['username'] = $_SESSION['admin_username'] ?? '';
-        $data['error'] = null;
+        $data = [
+            'username' => $_SESSION['admin_username'] ?? '',
+            'error' => null
+        ];
 
         $this->view('admin/mobil_tambah', $data);
+    }
+
+    // Menampilkan dan memproses ubah kendaraan
+    public function ubah(string $noPlat): void
+    {
+        require_admin_login();
+
+        $noPlat = rawurldecode($noPlat);
+
+        // Mencari data mobil berdasarkan nomor plat
+        $mobilLama = $this->model->findByNoPlat($noPlat);
+
+        if ($mobilLama === null) {
+            set_flash_message(
+                'danger',
+                'Data kendaraan tidak ditemukan.'
+            );
+
+            header('Location: ' . site_url('admin/mobil'));
+            exit;
+        }
+
+        // Jika halaman dibuka dengan GET
+        if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+            $this->renderMobil('ubah', $mobilLama);
+            return;
+        }
+
+        // Jika bukan GET atau POST
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            http_response_code(405);
+            exit('Metode request tidak diizinkan.');
+        }
+
+        // Mengambil data dari formulir
+        $data = [
+            'no_plat' => $noPlat,
+            'nm_mobil' => trim($_POST['nm_mobil'] ?? ''),
+            'nkursi' => filter_var(
+                $_POST['nkursi'] ?? null,
+                FILTER_VALIDATE_INT
+            ),
+            'nbagasi' => filter_var(
+                $_POST['nbagasi'] ?? null,
+                FILTER_VALIDATE_INT
+            ),
+            'jns_mobil' => $_POST['jns_mobil'] ?? '',
+            'transmisi' => $_POST['transmisi'] ?? '',
+            'thn_buat' => filter_var(
+                $_POST['thn_buat'] ?? null,
+                FILTER_VALIDATE_INT
+            ),
+
+            // Foto lama dipertahankan jika tidak diganti
+            'ft_depan' => $mobilLama['ft_depan'],
+            'ft_blkg' => $mobilLama['ft_blkg'],
+            'ft_interior' => $mobilLama['ft_interior'],
+
+            'hrg_hari' => filter_var(
+                $_POST['hrg_hari'] ?? null,
+                FILTER_VALIDATE_INT
+            ),
+            'cttn_unit' => trim($_POST['cttn_unit'] ?? ''),
+            'status_unit' => $_POST['status_unit'] ?? ''
+        ];
+
+        // Validasi data
+        $error = $this->validateMobilInput($data);
+
+        if ($error !== null) {
+            $this->renderMobil(
+                'ubah',
+                array_merge($mobilLama, $data),
+                $error
+            );
+            return;
+        }
+
+        $uploadedFiles = [];
+        $fotoLamaUntukDihapus = [];
+
+        try {
+            // Memproses foto baru jika dipilih
+            foreach (
+                ['ft_depan', 'ft_blkg', 'ft_interior'] as $field
+            ) {
+                $filename = $this->uploadFoto($field);
+
+                if ($filename !== null) {
+                    $uploadedFiles[] = $filename;
+
+                    if (!empty($mobilLama[$field])) {
+                        $fotoLamaUntukDihapus[] =
+                            $mobilLama[$field];
+                    }
+
+                    $data[$field] = $filename;
+                }
+            }
+
+            // Memperbarui data di database
+            $success = $this->model->update($noPlat, $data);
+
+            if (!$success) {
+                throw new RuntimeException(
+                    'Data kendaraan gagal diperbarui.'
+                );
+            }
+
+        } catch (Throwable $e) {
+            // Hapus foto baru jika proses gagal
+            $this->hapusFotoBaru($uploadedFiles);
+
+            $this->renderMobil(
+                'ubah',
+                array_merge($mobilLama, $data),
+                $e->getMessage()
+            );
+            return;
+        }
+
+        // Hapus foto lama setelah data berhasil diperbarui
+        $this->hapusFotoBaru($fotoLamaUntukDihapus);
+
+        set_flash_message(
+            'success',
+            'Data kendaraan berhasil diperbarui.'
+        );
+
+        header('Location: ' . site_url('admin/mobil'));
+        exit;
+    }
+
+    // Validasi data kendaraan
+    private function validateMobilInput(array $data): ?string
+    {
+        if (
+            empty($data['no_plat']) ||
+            empty($data['nm_mobil']) ||
+            $data['nkursi'] === false ||
+            $data['nkursi'] === null ||
+            $data['nbagasi'] === false ||
+            $data['nbagasi'] === null ||
+            $data['thn_buat'] === false ||
+            $data['thn_buat'] === null ||
+            $data['hrg_hari'] === false ||
+            $data['hrg_hari'] === null
+        ) {
+            return 'Semua data wajib harus diisi dengan benar.';
+        }
+
+        if (strlen($data['no_plat']) > 15) {
+            return 'Nomor plat maksimal 15 karakter.';
+        }
+
+        if (strlen($data['nm_mobil']) > 40) {
+            return 'Nama mobil maksimal 40 karakter.';
+        }
+
+        if ($data['nkursi'] < 1 || $data['nkursi'] > 25) {
+            return 'Jumlah kursi harus antara 1 sampai 25.';
+        }
+
+        if ($data['nbagasi'] < 0 || $data['nbagasi'] > 30) {
+            return 'Jumlah bagasi harus antara 0 sampai 30.';
+        }
+
+        if (!in_array(
+            $data['jns_mobil'],
+            ['SUV', 'MPV', 'City Car'],
+            true
+        )) {
+            return 'Jenis mobil tidak valid.';
+        }
+
+        if (!in_array(
+            $data['transmisi'],
+            ['AT', 'MT'],
+            true
+        )) {
+            return 'Transmisi tidak valid.';
+        }
+
+        if ($data['thn_buat'] < 1901 || $data['thn_buat'] > 2155) {
+            return 'Tahun pembuatan tidak valid.';
+        }
+
+        if ($data['hrg_hari'] < 1 || $data['hrg_hari'] > 8388607) {
+            return 'Harga sewa tidak valid.';
+        }
+
+        if (strlen($data['cttn_unit']) > 500) {
+            return 'Catatan maksimal 500 karakter.';
+        }
+
+        if (!in_array(
+            $data['status_unit'],
+            ['tersedia', 'disewa', 'tidaktersedia'],
+            true
+        )) {
+            return 'Status kendaraan tidak valid.';
+        }
+
+        return null;
+    }
+
+    // Menampilkan halaman tambah atau ubah
+    private function renderMobil(
+        string $aksi,
+        array $mobil,
+        ?string $error = null
+    ): void {
+        $dataView = [
+            'mobil' => $mobil,
+            'username' => $_SESSION['admin_username'] ?? '',
+            'error' => $error
+        ];
+
+        $this->view('admin/mobil_' . $aksi, $dataView);
     }
 
     // Upload foto kendaraan
@@ -237,7 +374,7 @@ class Mobil_controller extends Controller
 
         $allowed = [
             'image/jpeg' => 'jpg',
-            'image/png'  => 'png',
+            'image/png' => 'png',
             'image/webp' => 'webp'
         ];
 
@@ -270,7 +407,7 @@ class Mobil_controller extends Controller
         return $filename;
     }
 
-    // Menghapus foto yang baru diunggah jika penyimpanan gagal
+    // Menghapus foto yang tidak lagi digunakan
     private function hapusFotoBaru(array $files): void
     {
         foreach ($files as $filename) {

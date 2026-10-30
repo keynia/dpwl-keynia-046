@@ -35,7 +35,7 @@ Pengujian dilakukan dengan memeriksa konfigurasi route dan mengakses URL yang te
 
 
 
-# P5 - Implementasi INSERT Data Kendaraan
+# D - Implementasi INSERT Data Kendaraan
 
 ## 1. Deskripsi
 Pada tahap P5 dilakukan pengembangan fitur INSERT untuk menambahkan data kendaraan baru ke aplikasi DPWL menggunakan konsep MVC.
@@ -86,4 +86,71 @@ git log -1 --oneline
 ```
 
 Commit digunakan untuk mencatat perubahan P5 dan push untuk mengirim perubahan ke repositori.
+
+
+# E - Implementasi CRUD Data Kendaraan
+
+## 1. Deskripsi
+Pada pertemuan P5 dilakukan pengembangan aplikasi penyewaan kendaraan menggunakan PHP 8.4 dengan konsep MVC (Model, View, Controller).
+
+Pengembangan meliputi fitur INSERT, READ, dan UPDATE untuk mengelola data kendaraan pada tabel `t_mobil`.
+
+## 2. Implementasi UPDATE Data Kendaraan
+
+Fitur UPDATE digunakan untuk mengubah informasi kendaraan yang sudah tersimpan di database.
+
+Admin dapat mengubah:
+- Nama mobil.
+- Jumlah kursi dan bagasi.
+- Jenis mobil dan transmisi.
+- Tahun pembuatan.
+- Harga sewa per hari.
+- Catatan dan status kendaraan.
+- Foto depan, belakang, dan interior.
+
+Nomor plat digunakan sebagai identitas kendaraan dan tidak dapat diubah melalui formulir.
+
+Jika foto tidak diganti, aplikasi tetap menggunakan foto lama.
+
+## 3. Perubahan Berkas
+
+### a. Mobil_model.php
+Menambahkan method `findByNoPlat()` untuk mengambil data kendaraan berdasarkan nomor plat dan method `update()` untuk memperbarui data kendaraan menggunakan prepared statement.
+
+### b. Mobil_controller.php
+Menambahkan method `ubah()` untuk mengambil data lama, memvalidasi input, memproses upload foto, dan menyimpan perubahan ke database.
+
+### c. mobil_ubah.php
+Membuat halaman formulir untuk mengubah data kendaraan dengan tampilan AdminLTE. Data kendaraan lama ditampilkan secara otomatis pada formulir.
+
+### d. routes.php
+Menambahkan route untuk mengakses halaman ubah kendaraan melalui URL `admin/mobil/ubah/{noPlat}`.
+
+## 4. Hasil Pengujian
+
+Pengujian yang telah dilakukan:
+1. Halaman ubah kendaraan berhasil ditampilkan.
+2. Data kendaraan lama berhasil ditampilkan pada formulir.
+3. Formulir dapat digunakan untuk mengubah data kendaraan.
+4. Tampilan halaman ubah berhasil disesuaikan dengan AdminLTE.
+
+Fitur INSERT dan READ yang telah dibuat sebelumnya tetap dipertahankan.
+
+## 5. Kesimpulan
+
+Fitur UPDATE data kendaraan berhasil diimplementasikan menggunakan konsep MVC. Admin dapat mengubah informasi kendaraan melalui formulir dan menyimpan perubahan ke database.
+
+## 6. Git dan Version Control
+
+Perubahan proyek dicatat menggunakan Git dengan perintah:
+
+```bash
+git status
+git add .
+git commit -m "P5 implementasi UPDATE data kendaraan"
+git push
+git log -1 --oneline
+```
+
+Commit digunakan untuk mencatat perubahan fitur UPDATE, sedangkan push digunakan untuk mengirim perubahan ke repositori GitHub.
 
