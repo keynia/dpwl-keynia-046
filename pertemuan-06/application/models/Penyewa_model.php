@@ -147,4 +147,74 @@ $stmt->close();
 return $row !== null
 && password_verify($passwordSaatIni, $row['sandi']);
 }
+// P6: memperbarui data profil dan referensi foto.
+public function updateProfil(
+string $userPlg,
+string $nik,
+string $nama,
+string $noHp,
+string $alamat,
+?string $ftKtp,
+?string $ftSimA,
+?string $passwordHash = null
+): bool {
+if ($passwordHash !== null) {
+$sql = "UPDATE t_penyewa
+
+SET nik = ?,
+nm_lngkp = ?,
+no_hp = ?,
+almt_lngkp = ?,
+ft_ktp = ?,
+ft_sim_a = ?,
+sandi = ?
+WHERE user_plg = ?";
+$stmt = $this->db->prepare($sql);
+if (!$stmt) {
+throw new RuntimeException(
+'Query update profil dan password gagal disiapkan.'
+);
+}
+$stmt->bind_param(
+'ssssssss',
+$nik,
+$nama,
+$noHp,
+$alamat,
+$ftKtp,
+$ftSimA,
+$passwordHash,
+$userPlg
+);
+} else {
+$sql = "UPDATE t_penyewa
+SET nik = ?,
+nm_lngkp = ?,
+no_hp = ?,
+almt_lngkp = ?,
+ft_ktp = ?,
+ft_sim_a = ?
+WHERE user_plg = ?";
+$stmt = $this->db->prepare($sql);
+if (!$stmt) {
+throw new RuntimeException(
+'Query update profil gagal disiapkan.'
+);
+}
+$stmt->bind_param(
+'sssssss',
+$nik,
+$nama,
+$noHp,
+$alamat,
+$ftKtp,
+$ftSimA,
+$userPlg
+);
+}
+$success = $stmt->execute();
+$stmt->close();
+return $success;
+}
+
 }

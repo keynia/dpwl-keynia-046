@@ -138,3 +138,24 @@ http://localhost/dpwl-2522500046/index.php/auth/login-penyewa
 ### Kesimpulan
 
 Fitur login, sesi, dan logout penyewa telah berhasil diuji. Sistem dapat memproses login dengan benar, menolak data login yang salah, mengelola sesi pengguna, serta membatasi akses berdasarkan status login penyewa.
+
+## F.5. Pengujian Pembaruan Profil dan Penanganan Input Tidak Valid
+
+Pada tahap ini dilakukan pengujian terhadap fitur profil penyewa untuk memastikan data profil dapat ditampilkan dan diperbarui dengan benar.
+
+Pengujian dilakukan dengan login menggunakan akun penyewa, kemudian membuka halaman profil melalui alamat:
+
+http://localhost/dpwl-2522500046/index.php/penyewa/profil
+
+### Hasil Pengujian
+
+- **Menampilkan profil:** Berhasil. Sistem dapat menampilkan informasi profil penyewa sesuai akun yang sedang login.
+- **Pembaruan profil:** Berhasil. Penyewa dapat mengubah data profil dan menyimpan perubahan.
+- **Input tidak valid:** Sistem melakukan validasi apabila data yang dimasukkan tidak sesuai dengan ketentuan.
+- **Kolom wajib:** Sistem menolak penyimpanan apabila terdapat data wajib yang belum diisi.
+- **Unggah foto SIM:** Sistem menerima foto dengan format JPEG, PNG, atau WEBP dan ukuran maksimal 5 MB.
+- **Akses tanpa login:** Sistem mengarahkan pengguna ke halaman login apabila mencoba membuka halaman profil tanpa melakukan login.
+
+### Kesimpulan
+
+Fitur profil penyewa berhasil diuji. Sistem dapat menampilkan dan memperbarui data profil, melakukan validasi terhadap input yang tidak valid, serta membatasi akses halaman profil hanya untuk penyewa yang sudah login.

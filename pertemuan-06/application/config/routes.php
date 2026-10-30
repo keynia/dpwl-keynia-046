@@ -29,3 +29,4 @@ $route['katalog/detail/(:any)'] = 'Katalog_controller/detail/$1';
 $route['auth/register'] = 'Auth/register';
 $route['auth/login-penyewa'] = 'Auth/loginPenyewa';
 $route['auth/logout-penyewa'] = 'Auth/logoutPenyewa';
+$route['penyewa/profil'] = 'Penyewa_controller/profil';
