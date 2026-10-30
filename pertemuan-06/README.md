@@ -60,3 +60,24 @@ Pemeriksaan meliputi:
 ## Kesimpulan
 
 Aset TemplateMo telah disalin ke dalam folder `assets/zay/` pada workspace aplikasi. Struktur folder CSS, gambar, JavaScript, dan webfonts telah disiapkan. Jalur aset perlu disesuaikan ketika proses integrasi ke dalam View aplikasi MVC agar seluruh aset dapat dipanggil dengan benar.
+
+## B.4. Pengujian Integrasi Model, Controller, View, dan Navigasi Katalog
+
+Pada tahap ini dilakukan pengujian terhadap fitur katalog kendaraan menggunakan konsep MVC (Model, View, Controller).
+
+Pengujian dilakukan dengan membuka alamat:
+http://localhost/dpwl-2522500046/index.php/katalog
+
+### Hasil Pengujian
+
+Berdasarkan pengujian yang telah dilakukan, diperoleh hasil sebagai berikut:
+
+- **Model:** Berhasil mengambil data kendaraan dari database.
+- **Controller:** Berhasil memanggil Model dan mengirimkan data ke View.
+- **View katalog:** Berhasil menampilkan data kendaraan.
+- **Navigasi katalog:** Berhasil membuka halaman katalog melalui URL yang ditentukan.
+- **Foto kendaraan:** Belum tersedia karena foto kendaraan belum diunggah melalui fitur Manajemen Kendaraan.
+
+### Kesimpulan
+
+Integrasi Model, Controller, View, dan navigasi katalog kendaraan telah berhasil dilakukan. Data kendaraan berhasil ditampilkan pada halaman katalog. Namun, foto kendaraan belum tersedia sehingga perlu diunggah melalui fitur Manajemen Kendaraan.

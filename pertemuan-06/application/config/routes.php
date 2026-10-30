@@ -22,3 +22,6 @@ $route['admin/mobil'] = 'Mobil_controller/index';
 $route['admin/mobil/tambah'] = 'Mobil_controller/tambah';
 $route['admin/mobil/ubah/(:any)'] = 'Mobil_controller/ubah/$1';
 $route['admin/mobil/hapus/(:any)'] = 'Mobil_controller/hapus/$1';
+
+// Route P6
+$route['katalog'] = 'Katalog_controller/index';

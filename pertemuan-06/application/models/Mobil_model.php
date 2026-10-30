@@ -152,4 +152,42 @@ $stmt->close();
 return $success;
 }
 
+// P6: mendapatkan mobil untuk katalog
+public function getKatalog(): array
+{
+$sql = "SELECT
+no_plat,
+nm_mobil,
+nkursi,
+nbagasi,
+jns_mobil,
+transmisi,
+thn_buat,
+ft_depan,
+ft_blkg,
+ft_interior,
+hrg_hari,
+cttn_unit,
+status_unit
+FROM t_mobil
+ORDER BY nm_mobil ASC";
+$stmt = $this->db->prepare($sql);
+if (!$stmt) {
+    throw new RuntimeException(
+'Query katalog kendaraan gagal disiapkan.'
+);
+}
+if (!$stmt->execute()) {
+$stmt->close();
+throw new RuntimeException(
+'Data katalog kendaraan gagal diambil.'
+);
+}
+$result = $stmt->get_result();
+$data = $result->fetch_all(MYSQLI_ASSOC);
+$stmt->close();
+return $data;
+}
+
+
 }
