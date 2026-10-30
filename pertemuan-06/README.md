@@ -32,3 +32,31 @@ Pengujian dilakukan dengan menjalankan aplikasi melalui browser. Langkah-langkah
 5. Mencoba proses pendaftaran dan login penyewa.
 6. Menguji fitur logout dan pengelolaan profil.
 7. Memeriksa akses URL tanpa index.php.
+
+
+# README – A5
+
+## Pemeriksaan Aset TemplateMo
+
+Pada tahap ini dilakukan pemeriksaan aset TemplateMo yang digunakan untuk pengembangan tampilan aplikasi rental kendaraan.
+
+Pemeriksaan meliputi:
+
+1. Folder `assets/zay/css/` untuk memastikan file CSS tersedia.
+2. Folder `assets/zay/img/` untuk memastikan gambar tersedia.
+3. Folder `assets/zay/js/` untuk memastikan file JavaScript tersedia.
+4. Folder `assets/zay/webfonts/` untuk memastikan file font tersedia.
+5. Memeriksa kesesuaian jalur aset antara file HTML TemplateMo dengan lokasi aset pada proyek aplikasi.
+
+## Hasil Pemeriksaan
+
+- **File CSS:** Tersedia di dalam folder `assets/zay/css/`.
+- **File gambar:** Tersedia di dalam folder `assets/zay/img/`.
+- **File JavaScript:** Tersedia di dalam folder `assets/zay/js/`.
+- **File webfonts:** Tersedia di dalam folder `assets/zay/webfonts/`.
+- **Jalur aset:** Perlu disesuaikan karena lokasi aset pada aplikasi berada di dalam folder `assets/zay/`, sedangkan file HTML TemplateMo menggunakan jalur relatif bawaan.
+- **File yang tidak ditemukan:** Tidak ditemukan berdasarkan pemeriksaan folder aset yang tersedia.
+
+## Kesimpulan
+
+Aset TemplateMo telah disalin ke dalam folder `assets/zay/` pada workspace aplikasi. Struktur folder CSS, gambar, JavaScript, dan webfonts telah disiapkan. Jalur aset perlu disesuaikan ketika proses integrasi ke dalam View aplikasi MVC agar seluruh aset dapat dipanggil dengan benar.
