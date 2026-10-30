@@ -81,3 +81,23 @@ Berdasarkan pengujian yang telah dilakukan, diperoleh hasil sebagai berikut:
 ### Kesimpulan
 
 Integrasi Model, Controller, View, dan navigasi katalog kendaraan telah berhasil dilakukan. Data kendaraan berhasil ditampilkan pada halaman katalog. Namun, foto kendaraan belum tersedia sehingga perlu diunggah melalui fitur Manajemen Kendaraan.
+
+## C.4. Pengujian Navigasi Katalog ke Detail dan Penanganan Galat
+
+Pada tahap ini dilakukan pengujian untuk memastikan halaman katalog dapat terhubung ke halaman detail kendaraan.
+
+Pengujian dilakukan dengan membuka alamat:
+http://localhost/dpwl-2522500046/index.php/katalog
+
+Kemudian memilih salah satu foto atau nama kendaraan untuk membuka halaman detail kendaraan.
+
+### Hasil Pengujian
+
+- **Navigasi katalog ke detail:** Berhasil. Ketika foto atau nama kendaraan diklik, halaman detail kendaraan dapat dibuka.
+- **URL detail kendaraan:** Berhasil menampilkan alamat detail berdasarkan nomor plat kendaraan.
+- **Informasi kendaraan:** Berhasil menampilkan informasi kendaraan sesuai data yang dipilih.
+- **Penanganan galat:** Dilakukan dengan memeriksa kondisi kendaraan yang tidak ditemukan. Sistem menampilkan pesan "Kendaraan tidak ditemukan."
+
+### Kesimpulan
+
+Pengujian navigasi katalog ke detail kendaraan berhasil dilakukan. Halaman detail dapat menampilkan informasi kendaraan berdasarkan nomor plat yang dipilih. Penanganan galat juga disiapkan untuk kondisi ketika data kendaraan tidak ditemukan.

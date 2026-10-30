@@ -25,3 +25,4 @@ $route['admin/mobil/hapus/(:any)'] = 'Mobil_controller/hapus/$1';
 
 // Route P6
 $route['katalog'] = 'Katalog_controller/index';
+$route['katalog/detail/(:any)'] = 'Katalog_controller/detail/$1';
