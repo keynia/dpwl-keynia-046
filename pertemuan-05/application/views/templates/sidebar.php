@@ -45,6 +45,12 @@ ENT_QUOTES,
 <i class="fa fa-users"></i> <span>Manajemen Admin</span>
 </a>
 </li>
+<li>
+    <a href="<?= site_url('admin/mobil') ?>">
+        <i class="fa fa-car"></i>
+        <span>Manajemen Kendaraan</span>
+    </a>
+</li>
 <
 </ul>
 <!-- /.sidebar-menu -->

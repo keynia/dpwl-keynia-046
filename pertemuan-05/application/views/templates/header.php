@@ -47,12 +47,11 @@ $adminlte_url . 'dist/css/skins/skin-blue.min.css',
 ENT_QUOTES,
 'UTF-8'
 ) ?>">
-<!-- BARU - DataTables mengikuti template datatableswithfullfeatures.html. -->
-<link rel="stylesheet"
-href="<?= htmlspecialchars(
-$adminlte_url . 'bower_components/datatables.netbs/css/dataTables.bootstrap.min.css',
-ENT_QUOTES,
-'UTF-8'
+<!-- DataTables Bootstrap CSS -->
+<link rel="stylesheet" href="<?= htmlspecialchars(
+    $adminlte_url . 'bower_components/datatables.net-bs/css/dataTables.bootstrap.min.css',
+    ENT_QUOTES,
+    'UTF-8'
 ) ?>">
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -197,8 +196,9 @@ aria-valuenow="20" aria-valuemin="0" ariavaluemax="100">
 class="user-image" alt="User Image">
 <!-- hidden-xs hides the username on small devices so only the image
 appears. -->
-<span class="hidden-xs"><?= htmlspecialchars($username, ENT_QUOTES,
-'UTF-8') ?></span>
+<span class="hidden-xs">
+    <?= htmlspecialchars($username ?? '', ENT_QUOTES, 'UTF-8') ?>
+</span>
 </a>
 <ul class="dropdown-menu">
 <!-- The user image in the menu -->
@@ -206,7 +206,8 @@ appears. -->
 <img src="<?= $adminlte_url . 'dist/img/user2-160x160.jpg' ?>"
 class="img-circle" alt="User Image">
 <p>
-    <?= htmlspecialchars($username, ENT_QUOTES, 'UTF-8') ?> - Web
+    <?= htmlspecialchars($username ?? '', ENT_QUOTES, 'UTF-8') ?> 
+</p>
 Developer
 <small>Member since Nov. 2012</small>
 </p>

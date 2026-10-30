@@ -1,16 +1,24 @@
 <?php
+// Nama Berkas - application\config\routes.php
 $route = [];
 
-// Route P2/P3 - dipertahankan.
-$route['default_controller'] = 'home';
-$route['info/(:any)'] = 'home/info/$1';
-$route['login'] = 'auth/login';
-$route['auth/login'] = 'auth/login';
-$route['auth/logout'] = 'auth/logout';
-$route['admin'] = 'admin/index';
+// Route P2/P3 - dipertahankan, penyesuaian terhadap penulisan nama Controller.
+$route['default_controller'] = 'Home';
+$route['info/(:any)'] = 'Home/info/$1';
+$route['login'] = 'Auth/login';
+$route['auth/login'] = 'Auth/login';
+$route['auth/logout'] = 'Auth/logout';
+$route['admin'] = 'Admin/index';
 
-// P4: BARU - semua proses CRUD admin dipindahkan di bawah /admin/madmin.
-$route['admin/madmin'] = 'madmin_controller/index';
-$route['admin/madmin/tambah'] = 'madmin_controller/tambah';
-$route['admin/madmin/ubah/(:any)'] = 'madmin_controller/ubah/$1';
-$route['admin/madmin/hapus/(:any)'] = 'madmin_controller/hapus/$1';
+// Route P4: semua proses CRUD admin dipindahkan di URL admin/madmin.
+$route['admin/madmin'] = 'Madmin_controller/index';
+$route['admin/madmin/tambah'] = 'Madmin_controller/tambah';
+$route['admin/madmin/ubah/(:any)'] = 'Madmin_controller/ubah/$1';
+$route['admin/madmin/hapus/(:any)'] = 'Madmin_controller/hapus/$1';
+
+// Route P5
+// dari href(menu), diproses ke Mobil_controller
+$route['admin/mobil'] = 'Mobil_controller/index';
+$route['admin/mobil/tambah'] = 'Mobil_controller/tambah';
+$route['admin/mobil/ubah/(:any)'] = 'Mobil_controller/ubah/$1';
+$route['admin/mobil/hapus/(:any)'] = 'Mobil_controller/hapus/$1';
