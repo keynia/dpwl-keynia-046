@@ -91,4 +91,102 @@ class Auth extends Controller
     header('Location: ' . site_url('auth/login'));
     exit;
   }
+
+  // P6: register penyewa
+public function register(): void
+{
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+$flash = $_SESSION['flash_penyewa'] ?? null;
+unset($_SESSION['flash_penyewa']);
+$this->view('auth/register', [
+'success' => $flash
+]);
+return;
+}
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+http_response_code(405);
+header('Allow: GET, POST');
+exit('Method Not Allowed');
+}
+$userPlg = trim($_POST['user_plg'] ?? '');
+$password = $_POST['sandi'] ?? '';
+$confirmPassword = $_POST['konfirmasi_sandi'] ?? '';
+$nik = trim($_POST['nik'] ?? '');
+$nama = trim($_POST['nm_lngkp'] ?? '');
+$noHp = trim($_POST['no_hp'] ?? '');
+$alamat = trim($_POST['almt_lngkp'] ?? '');
+$old = [
+'user_plg' => $userPlg,
+'nik' => $nik,
+'nm_lngkp' => $nama,
+'no_hp' => $noHp,
+'almt_lngkp' => $alamat
+];
+$error = null;
+if (
+!preg_match('/\A[A-Za-z0-9._-]{1,15}\z/', $userPlg)
+) {
+$error = 'Username harus 1–15 karakter: huruf, angka, titik, garis bawah, atau tanda hubung.';
+} elseif (strlen($password) < 8) {
+$error = 'Password minimal 8 karakter.';
+} elseif ($password !== $confirmPassword) {
+$error = 'Konfirmasi password tidak sama.';
+} elseif (!preg_match('/\A[0-9]{16}\z/', $nik)) {
+$error = 'NIK harus terdiri dari 16 digit angka.';
+} elseif ($nama === '' || strlen($nama) > 100) {
+$error = 'Nama lengkap wajib diisi, maksimal 100 karakter.';
+} elseif (
+$noHp === '' ||
+strlen($noHp) > 15 ||
+!preg_match('/\A[0-9+(). -]+\z/', $noHp)
+) {
+$error = 'Nomor HP wajib diisi dan formatnya tidak valid.';
+} elseif ($alamat === '' || strlen($alamat) > 300) {
+$error = 'Alamat wajib diisi, maksimal 300 karakter.';
+}
+
+if ($error !== null) {
+$this->view('auth/register', [
+'error' => $error,
+'old' => $old
+]);
+return;
+}
+require_once APPPATH . 'models/Penyewa_model.php';
+try {
+$model = new Penyewa_model();
+if ($model->findByUserPlg($userPlg) !== null) {
+$this->view('auth/register', [
+'error' => 'Username sudah digunakan.',
+'old' => $old
+]);
+return;
+}
+$hash = password_hash($password, PASSWORD_DEFAULT);
+if ($hash === false) {
+throw new RuntimeException('Pembuatan hash password gagal.');
+}
+$created = $model->create([
+'user_plg' => $userPlg,
+'sandi' => $hash,
+'nik' => $nik,
+'nm_lngkp' => $nama,
+'no_hp' => $noHp,
+'almt_lngkp' => $alamat
+]);
+if (!$created) {
+throw new RuntimeException('Penyimpanan data penyewa gagal.');
+}
+$_SESSION['flash_penyewa'] =
+'Registrasi berhasil. Data akun Anda telah tersimpan.';
+header('Location: ' . site_url('auth/register'));
+exit;
+} catch (Throwable $e) {
+error_log('Registrasi penyewa gagal: ' . $e->getMessage());
+$this->view('auth/register', [
+'error' => 'Registrasi belum berhasil diproses. Periksa data dan coba kembali.',
+'old' => $old
+]);
+}
+}
 }

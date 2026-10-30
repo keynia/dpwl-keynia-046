@@ -101,3 +101,21 @@ Kemudian memilih salah satu foto atau nama kendaraan untuk membuka halaman detai
 ### Kesimpulan
 
 Pengujian navigasi katalog ke detail kendaraan berhasil dilakukan. Halaman detail dapat menampilkan informasi kendaraan berdasarkan nomor plat yang dipilih. Penanganan galat juga disiapkan untuk kondisi ketika data kendaraan tidak ditemukan.
+
+## D.5. Pengujian Registrasi Berhasil, Input Tidak Valid, dan Akun Duplikat
+
+Pada tahap ini dilakukan pengujian fitur registrasi akun penyewa untuk memastikan pengguna dapat membuat akun baru dengan mengisi formulir registrasi.
+
+Pengujian dilakukan dengan membuka alamat:
+http://localhost/dpwl-2522500046/index.php/auth/register
+
+### Hasil Pengujian
+
+- **Registrasi berhasil:** Berhasil. Pengguna dapat mengisi formulir dan membuat akun penyewa baru.
+- **Input tidak valid:** Sistem melakukan validasi apabila data yang dimasukkan tidak sesuai dengan ketentuan atau terdapat kolom wajib yang belum diisi.
+- **Akun duplikat:** Sistem memeriksa username yang sudah terdaftar agar tidak dapat digunakan kembali oleh akun lain.
+- **Penyimpanan data:** Data akun penyewa berhasil disimpan ke dalam database.
+
+### Kesimpulan
+
+Fitur registrasi akun penyewa telah berhasil dibuat dan diuji. Sistem dapat menerima pendaftaran akun baru, melakukan validasi input, serta mencegah penggunaan username yang sudah terdaftar.
