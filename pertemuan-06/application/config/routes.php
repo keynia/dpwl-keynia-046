@@ -27,3 +27,5 @@ $route['admin/mobil/hapus/(:any)'] = 'Mobil_controller/hapus/$1';
 $route['katalog'] = 'Katalog_controller/index';
 $route['katalog/detail/(:any)'] = 'Katalog_controller/detail/$1';
 $route['auth/register'] = 'Auth/register';
+$route['auth/login-penyewa'] = 'Auth/loginPenyewa';
+$route['auth/logout-penyewa'] = 'Auth/logoutPenyewa';

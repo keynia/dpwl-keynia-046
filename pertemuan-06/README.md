@@ -119,3 +119,22 @@ http://localhost/dpwl-2522500046/index.php/auth/register
 ### Kesimpulan
 
 Fitur registrasi akun penyewa telah berhasil dibuat dan diuji. Sistem dapat menerima pendaftaran akun baru, melakukan validasi input, serta mencegah penggunaan username yang sudah terdaftar.
+
+## E.4. Pengujian Login Berhasil, Login Gagal, Sesi, Logout, dan Pembatasan Akses
+
+Pada tahap ini dilakukan pengujian fitur login dan logout penyewa untuk memastikan proses autentikasi berjalan dengan baik.
+
+Pengujian dilakukan dengan membuka alamat:
+http://localhost/dpwl-2522500046/index.php/auth/login-penyewa
+
+### Hasil Pengujian
+
+- **Login berhasil:** Berhasil. Penyewa dapat masuk menggunakan username dan password yang telah didaftarkan.
+- **Login gagal:** Sistem menolak proses login apabila username atau password yang dimasukkan salah.
+- **Sesi login:** Berhasil. Sistem dapat mempertahankan status login penyewa selama sesi berlangsung.
+- **Logout:** Berhasil. Penyewa dapat keluar dari akun dan mengakhiri sesi login.
+- **Pembatasan akses:** Sistem membatasi akses halaman tertentu agar hanya dapat digunakan oleh penyewa yang sudah login.
+
+### Kesimpulan
+
+Fitur login, sesi, dan logout penyewa telah berhasil diuji. Sistem dapat memproses login dengan benar, menolak data login yang salah, mengelola sesi pengguna, serta membatasi akses berdasarkan status login penyewa.

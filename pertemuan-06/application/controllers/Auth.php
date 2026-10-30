@@ -189,4 +189,75 @@ $this->view('auth/register', [
 ]);
 }
 }
+
+// P6: login penyewa
+public function loginPenyewa(): void
+{
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+$this->view('auth/login_penyewa');
+return;
+}
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+http_response_code(405);
+header('Allow: GET, POST');
+exit('Method Not Allowed');
+}
+$userPlg = trim($_POST['user_plg'] ?? '');
+$password = $_POST['sandi'] ?? '';
+if (
+!preg_match('/\A[A-Za-z0-9._-]{1,15}\z/', $userPlg)
+) {
+$this->view('auth/login_penyewa', [
+'error' => 'Username atau password tidak sesuai.'
+]);
+return;
+}
+if ($password === '') {
+$this->view('auth/login_penyewa', [
+'error' => 'Username atau password tidak sesuai.'
+]);
+return;
+}
+require_once APPPATH . 'models/Penyewa_model.php';
+try {
+$model = new Penyewa_model();
+$penyewa = $model->findForLogin($userPlg);
+if (
+!$penyewa ||
+!password_verify($password, $penyewa['sandi'])
+) {
+$this->view('auth/login_penyewa', [
+'error' => 'Username atau password tidak sesuai.'
+]);
+return;
+}
+session_regenerate_id(true);
+$_SESSION['penyewa_user_plg'] = $penyewa['user_plg'];
+$_SESSION['flash_penyewa_nav'] =
+'Login berhasil. Selamat datang, ' . $penyewa['nm_lngkp'] . '!';
+header('Location: ' . site_url('katalog'));
+exit;
+} catch (Throwable $e) {
+error_log('Login penyewa gagal: ' . $e->getMessage());
+$this->view('auth/login_penyewa', [
+'error' => 'Login belum dapat diproses. Silakan coba kembali.'
+]);
+}
+}
+// P6: logout penyewa
+public function logoutPenyewa(): void
+{
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+http_response_code(405);
+header('Allow: POST');
+exit('Method Not Allowed');
+}
+unset($_SESSION['penyewa_user_plg']);
+session_regenerate_id(true);
+$_SESSION['flash_penyewa_nav'] =
+'Anda telah logout dari akun penyewa.';
+header('Location: ' . site_url('katalog'));
+exit;
+}
+
 }
