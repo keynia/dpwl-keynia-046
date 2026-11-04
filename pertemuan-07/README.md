@@ -98,3 +98,21 @@ Setelah perubahan selesai, saya melakukan pengujian melalui localhost dengan mem
 Pada tahap ini, pengujian jumlah kendaraan dalam keranjang belum dilakukan karena masih membutuhkan integrasi Model dan Controller pada tahap D.2.
 
 Dengan perubahan ini, navbar sudah memiliki fitur notifikasi dan tautan menuju halaman keranjang yang dapat digunakan oleh penyewa.
+
+### D.2.2. Memperbarui application/controllers/Katalog_controller.php
+
+Pada tahap ini, saya melakukan perubahan pada file `application/controllers/Katalog_controller.php` untuk menghubungkan Model transaksi dengan Controller katalog. Perubahan ini bertujuan agar jumlah kendaraan yang ada di dalam keranjang dapat dikirim ke halaman katalog dan halaman detail kendaraan, kemudian ditampilkan pada navbar.
+
+Perubahan yang dilakukan meliputi:
+
+1. Menambahkan pemanggilan file `Transaksi_model.php` agar Controller katalog dapat menggunakan Model transaksi.
+2. Menambahkan properti `$transaksiModel` di dalam class `Katalog_controller`.
+3. Menambahkan inisialisasi objek `Transaksi_model` pada method `__construct()`.
+4. Memperbarui method `index()` agar mengambil username penyewa dari session dan mengirimkan data `jumlahKeranjang` ke halaman katalog.
+5. Memperbarui method `detail()` agar jumlah kendaraan dalam keranjang juga dikirim ke halaman detail kendaraan.
+
+Jumlah keranjang dihitung berdasarkan akun penyewa yang sedang login. Jika penyewa belum login, jumlah keranjang akan bernilai 0. Dengan demikian, jumlah keranjang yang ditampilkan tidak mengambil data dari akun penyewa lain.
+
+Setelah perubahan selesai, pengujian dilakukan melalui browser dengan membuka halaman katalog dan detail kendaraan. Pengujian juga dilakukan sebelum dan sesudah login sebagai penyewa untuk memastikan navbar menampilkan jumlah keranjang sesuai akun yang digunakan.
+
+Dengan perubahan ini, halaman katalog dan detail kendaraan sudah dapat menerima data jumlah keranjang dari Model transaksi melalui Controller katalog sehingga jumlah tersebut dapat ditampilkan pada navbar.
