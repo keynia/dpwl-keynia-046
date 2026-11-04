@@ -189,3 +189,34 @@ Halaman ini juga dilengkapi dengan pesan notifikasi apabila terdapat proses yang
 Untuk pengaturan periode sewa, sistem memberikan batas waktu pengambilan minimal dua jam dari waktu sekarang dan tanggal selesai harus setelah tanggal mulai. Data yang ditampilkan juga diamankan menggunakan `htmlspecialchars()` agar lebih aman ketika ditampilkan pada halaman.
 
 Dengan dibuatnya halaman ini, penyewa dapat melihat isi keranjang, memeriksa biaya sewa, memperbarui periode penyewaan, menghapus kendaraan, dan melanjutkan ke proses checkout.
+
+### F.2. Menambahkan Method keranjang() dan Lainnya pada Controller Transaksi
+
+Pada tahap ini, dilakukan penambahan beberapa method pada
+Transaksi_controller.php untuk mengelola proses keranjang penyewaan
+kendaraan. Method yang ditambahkan meliputi keranjang(), perbaruiPeriode(),
+hapus(), dan checkout().
+
+Method keranjang() digunakan untuk menampilkan data keranjang milik
+penyewa yang sedang login. Data keranjang diambil melalui
+Transaksi_model dan ditampilkan pada halaman transaksi/keranjang.php.
+
+Method perbaruiPeriode() digunakan untuk memperbarui tanggal mulai,
+tanggal selesai, dan waktu pengambilan kendaraan. Method hapus()
+digunakan untuk menghapus kendaraan yang dipilih dari keranjang.
+Sementara itu, method checkout() digunakan untuk menampilkan halaman
+konfirmasi dan memproses pengajuan transaksi kepada admin.
+
+Pada bagian Model, ditambahkan method pendukung seperti getKeranjang(),
+perbaruiPeriodeKeranjang(), validasiWaktuMulai(), dan
+hapusDariKeranjang() agar proses pengelolaan keranjang dapat terhubung
+dengan database.
+
+Pengujian dilakukan melalui browser menggunakan aplikasi DPWL.
+Halaman keranjang berhasil ditampilkan dengan informasi kode transaksi,
+status keranjang, tanggal mulai, tanggal selesai, waktu pengambilan,
+daftar kendaraan, harga sewa, durasi, dan total biaya sewa.
+
+Dengan penambahan method tersebut, proses pengelolaan keranjang
+penyewaan kendaraan dapat dilakukan melalui Controller dan Model
+sesuai dengan konsep MVC.
