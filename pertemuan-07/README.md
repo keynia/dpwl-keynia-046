@@ -220,3 +220,30 @@ daftar kendaraan, harga sewa, durasi, dan total biaya sewa.
 Dengan penambahan method tersebut, proses pengelolaan keranjang
 penyewaan kendaraan dapat dilakukan melalui Controller dan Model
 sesuai dengan konsep MVC.
+
+### F.3.2. Menguji Tampilan Konfirmasi Checkout
+
+Pada tahap ini dilakukan pengujian terhadap halaman konfirmasi checkout
+untuk memastikan informasi transaksi penyewaan kendaraan dapat
+ditampilkan dengan benar. Pengujian dilakukan dengan login sebagai
+penyewa yang memiliki keranjang berisi minimal satu kendaraan.
+
+Setelah masuk ke halaman keranjang, penyewa menekan tombol
+Checkout / Lihat Konfirmasi untuk membuka halaman Konfirmasi Transaksi.
+
+Halaman konfirmasi menampilkan kode transaksi, tanggal mulai,
+tanggal selesai, waktu pengambilan, daftar kendaraan, harga sewa
+per hari, durasi sewa, subtotal, dan total biaya sewa.
+
+Sistem juga menampilkan perhitungan uang muka (DP) sebesar 30%
+dari total biaya sewa serta sisa pembayaran setelah dikurangi DP.
+
+Pengujian dilakukan untuk memastikan tombol Kembali ke Keranjang
+dapat mengarahkan penyewa kembali ke halaman keranjang dengan
+kode transaksi yang sama. Selain itu, halaman konfirmasi hanya
+dapat diakses oleh penyewa yang memiliki transaksi dengan status
+keranjang.
+
+Berdasarkan pengujian, halaman konfirmasi checkout dapat
+menampilkan ringkasan transaksi dan perhitungan biaya sewa
+sesuai dengan data keranjang.
