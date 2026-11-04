@@ -135,3 +135,30 @@ Jumlah kendaraan dalam keranjang dihitung berdasarkan akun penyewa yang sedang l
 Setelah perubahan selesai, pengujian dilakukan melalui browser dengan login sebagai penyewa, kemudian membuka halaman profil. Pengujian juga dilakukan dengan mengubah data profil menggunakan data valid dan tidak valid untuk memastikan jumlah keranjang tetap tampil meskipun terjadi kesalahan validasi.
 
 Dengan perubahan ini, navbar pada halaman profil penyewa sudah dapat menampilkan jumlah kendaraan dalam keranjang, sehingga jumlah keranjang dapat ditampilkan secara konsisten pada halaman katalog, detail kendaraan, dan profil penyewa.
+
+### E.1. Menambahkan Method tambahKeKeranjang()
+
+Pada tahap ini, saya menambahkan method `tambahKeKeranjang()` pada file `application/models/Transaksi_model.php`. Method ini berfungsi untuk memproses penambahan kendaraan ke dalam keranjang penyewa dan menyimpan data transaksi ke dalam database.
+
+Proses penambahan kendaraan dilakukan menggunakan pola Header-Detail, yaitu:
+1. Tabel `t_sewa` digunakan untuk menyimpan data utama transaksi atau keranjang penyewaan.
+2. Tabel `t_pilih` digunakan untuk menyimpan detail kendaraan yang dipilih oleh penyewa.
+
+Selain itu, saya menambahkan beberapa method pendukung, yaitu:
+1. `namaKunciKeranjang()` untuk membuat identitas kunci keranjang berdasarkan akun penyewa.
+2. `kunciKendaraan()` untuk mengunci dan memeriksa data kendaraan sebelum dimasukkan ke keranjang.
+3. `hitungHariSewa()` untuk menghitung lama waktu penyewaan berdasarkan tanggal mulai dan tanggal selesai.
+4. `normalisasiWaktu()` untuk memeriksa dan menyesuaikan format waktu pengambilan kendaraan.
+5. `tambahKeKeranjang()` untuk mencari keranjang aktif, membuat keranjang baru jika belum tersedia, dan menambahkan kendaraan yang dipilih.
+
+Method ini juga melakukan pemeriksaan agar kendaraan yang dimasukkan memiliki status tersedia dan tidak dimasukkan dua kali ke dalam keranjang yang sama. Proses penyimpanan menggunakan transaksi database agar data dapat dibatalkan kembali apabila terjadi kesalahan.
+
+Setelah perubahan selesai, pengujian dilakukan melalui localhost dengan langkah-langkah berikut:
+1. Login sebagai penyewa.
+2. Membuka halaman katalog dan memilih kendaraan yang berstatus tersedia.
+3. Menekan tombol Tambah ke Keranjang dan memastikan muncul pesan hasil proses.
+4. Memeriksa tabel `t_sewa` dan `t_pilih` melalui phpMyAdmin untuk memastikan data transaksi tersimpan dengan kode sewa yang sama.
+5. Menambahkan kendaraan lain dan memastikan kendaraan tersebut masuk ke keranjang aktif yang sama.
+6. Mencoba menambahkan kendaraan yang sama kembali untuk memastikan sistem menolak data duplikat.
+
+Dengan tahap ini, fitur penambahan kendaraan ke keranjang sudah terintegrasi dengan Model transaksi dan database, sehingga kendaraan yang dipilih penyewa dapat disimpan sebagai bagian dari transaksi penyewaan.
