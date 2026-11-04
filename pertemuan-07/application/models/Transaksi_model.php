@@ -673,4 +673,232 @@ public function getKeranjang(
         'total' => $total
     ];
 }
+// Memproses checkout dan menyimpan pembayaran DP.
+public function checkout(
+    string $kodeSewa,
+    string $userPlg
+): bool {
+    $kodeSewa = trim($kodeSewa);
+    $userPlg = trim($userPlg);
+
+    if ($kodeSewa === '' || $userPlg === '') {
+        throw new InvalidArgumentException(
+            'Kode transaksi dan penyewa wajib diisi.'
+        );
+    }
+
+    $this->db->begin_transaction();
+
+    try {
+        // 1. Memastikan transaksi milik penyewa dan masih berstatus keranjang.
+        $stmt = $this->db->prepare(
+            "SELECT kode_sewa, tgl_mulai, tgl_selesai
+             FROM t_sewa
+             WHERE kode_sewa = ?
+               AND user_plg = ?
+               AND status_sewa = 'keranjang'
+             FOR UPDATE"
+        );
+
+        if (!$stmt) {
+            throw new RuntimeException(
+                'Pemeriksaan transaksi gagal disiapkan.'
+            );
+        }
+
+        $stmt->bind_param('ss', $kodeSewa, $userPlg);
+        $stmt->execute();
+
+        $transaksi = $stmt->get_result()->fetch_assoc();
+        $stmt->close();
+
+        if ($transaksi === null) {
+            throw new RuntimeException(
+                'Transaksi tidak ditemukan atau sudah tidak berstatus keranjang.'
+            );
+        }
+
+        // 2. Menghitung durasi sewa.
+        $hariSeharusnya = $this->hitungHariSewa(
+            (string) $transaksi['tgl_mulai'],
+            (string) $transaksi['tgl_selesai']
+        );
+
+        // 3. Mengambil detail kendaraan dan memeriksa ketersediaannya.
+        $stmt = $this->db->prepare(
+            "SELECT
+                p.no_plat,
+                p.hrg_sewa,
+                p.n_hari,
+                m.status_unit
+             FROM t_pilih p
+             INNER JOIN t_mobil m
+                ON m.no_plat = p.no_plat
+             WHERE p.kode_sewa = ?
+             FOR UPDATE"
+        );
+
+        if (!$stmt) {
+            throw new RuntimeException(
+                'Pemeriksaan detail kendaraan gagal disiapkan.'
+            );
+        }
+
+        $stmt->bind_param('s', $kodeSewa);
+        $stmt->execute();
+
+        $detail = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+
+        if (empty($detail)) {
+            throw new RuntimeException(
+                'Keranjang masih kosong. Tambahkan kendaraan terlebih dahulu.'
+            );
+        }
+
+        $total = 0;
+
+        foreach ($detail as $item) {
+            if ($item['status_unit'] !== 'tersedia') {
+                throw new RuntimeException(
+                    'Kendaraan tidak berstatus tersedia.'
+                );
+            }
+
+            if ((int) $item['n_hari'] !== $hariSeharusnya) {
+                throw new RuntimeException(
+                    'Durasi sewa kendaraan tidak sesuai dengan periode transaksi.'
+                );
+            }
+
+            $total +=
+                (int) $item['hrg_sewa'] *
+                (int) $item['n_hari'];
+        }
+
+        if ($total <= 0) {
+            throw new RuntimeException(
+                'Total biaya transaksi tidak valid.'
+            );
+        }
+
+        // 4. Memastikan DP belum pernah dibuat untuk transaksi ini.
+        $stmt = $this->db->prepare(
+            "SELECT kode_bayar
+             FROM t_bayar
+             WHERE kode_sewa = ?
+               AND jns_byr = 'dp'
+             LIMIT 1
+             FOR UPDATE"
+        );
+
+        if (!$stmt) {
+            throw new RuntimeException(
+                'Pemeriksaan pembayaran DP gagal disiapkan.'
+            );
+        }
+
+        $stmt->bind_param('s', $kodeSewa);
+        $stmt->execute();
+
+        $dpSudahAda = $stmt->get_result()->fetch_assoc() !== null;
+        $stmt->close();
+
+        if ($dpSudahAda) {
+            throw new RuntimeException(
+                'Pembayaran DP untuk transaksi ini sudah tercatat.'
+            );
+        }
+
+        // 5. Menghitung DP sebesar 30%.
+        $nominalDp = (int) round($total * 30 / 100);
+
+        // Kode pembayaran terdiri dari 15 karakter.
+        $kodeBayar = 'B' . strtoupper(bin2hex(random_bytes(7)));
+
+        // 6. Mengubah status transaksi menjadi diajukan.
+        $stmt = $this->db->prepare(
+            "UPDATE t_sewa
+             SET status_sewa = 'diajukan'
+             WHERE kode_sewa = ?
+               AND user_plg = ?
+               AND status_sewa = 'keranjang'"
+        );
+
+        if (!$stmt) {
+            throw new RuntimeException(
+                'Perubahan status transaksi gagal disiapkan.'
+            );
+        }
+
+        $stmt->bind_param('ss', $kodeSewa, $userPlg);
+
+        if (!$stmt->execute()) {
+            $stmt->close();
+
+            throw new RuntimeException(
+                'Status transaksi gagal diperbarui.'
+            );
+        }
+
+        if ($stmt->affected_rows !== 1) {
+            $stmt->close();
+
+            throw new RuntimeException(
+                'Status transaksi tidak berhasil diubah.'
+            );
+        }
+
+        $stmt->close();
+
+        // 7. Menyimpan pembayaran DP ke tabel t_bayar.
+        $stmt = $this->db->prepare(
+            "INSERT INTO t_bayar (
+                kode_bayar,
+                tgl_wkt_byr,
+                ft_byr,
+                mtode_byr,
+                jns_byr,
+                nominal,
+                sttus_byr,
+                tgl_wkt_ver,
+                kode_sewa
+             ) VALUES (
+                ?, NOW(), NULL, 'transfer', 'dp', ?, 'pending', NULL, ?
+             )"
+        );
+
+        if (!$stmt) {
+            throw new RuntimeException(
+                'Penyimpanan pembayaran DP gagal disiapkan.'
+            );
+        }
+
+        $stmt->bind_param(
+            'sis',
+            $kodeBayar,
+            $nominalDp,
+            $kodeSewa
+        );
+
+        if (!$stmt->execute()) {
+            $stmt->close();
+
+            throw new RuntimeException(
+                'Pembayaran DP gagal disimpan.'
+            );
+        }
+
+        $stmt->close();
+
+        // 8. Menyimpan seluruh perubahan.
+        $this->db->commit();
+
+        return true;
+
+    } catch (Throwable $e) {
+        $this->db->rollback();
+        throw $e;
+    }
+}
 }

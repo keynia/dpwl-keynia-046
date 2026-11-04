@@ -247,3 +247,22 @@ keranjang.
 Berdasarkan pengujian, halaman konfirmasi checkout dapat
 menampilkan ringkasan transaksi dan perhitungan biaya sewa
 sesuai dengan data keranjang.
+
+### F.3.3. Menguji Proses Checkout
+
+Pada tahap ini dilakukan pengujian proses checkout untuk memastikan sistem dapat memproses pengajuan transaksi penyewaan kendaraan dengan benar. Pengujian dilakukan dengan login sebagai penyewa yang memiliki keranjang berisi kendaraan, kemudian membuka halaman konfirmasi transaksi dan menekan tombol Konfirmasi dan Ajukan Transaksi.
+
+Setelah konfirmasi disetujui, sistem akan memproses transaksi dan mengarahkan penyewa kembali ke halaman katalog dengan pemberitahuan bahwa transaksi berhasil diajukan dan menunggu persetujuan admin.
+
+Pengujian dilakukan dengan beberapa skenario berikut:
+No.	Skenario Pengujian	Hasil yang Diharapkan	Hasil
+1	Menekan tombol Konfirmasi dan Ajukan Transaksi.	Sistem memproses pengajuan transaksi.	Berhasil
+2	Memeriksa status transaksi pada tabel t_sewa.	Status berubah dari keranjang menjadi diajukan.	Berhasil
+3	Memeriksa data pembayaran pada tabel t_bayar.	Data pembayaran DP berhasil ditambahkan.	Berhasil
+4	Memeriksa jenis dan metode pembayaran.	Jenis pembayaran dp dan metode pembayaran transfer.	Berhasil
+5	Memeriksa nominal dan status pembayaran.	Nominal DP sebesar 30% dari total biaya sewa dengan status pending.	Berhasil
+6	Mencoba checkout kembali pada transaksi yang sudah diajukan.	Transaksi tidak dapat digunakan kembali sebagai keranjang aktif.	Berhasil
+
+Kesimpulan:
+
+Berdasarkan pengujian yang dilakukan, proses checkout dapat berjalan sesuai dengan yang diharapkan. Sistem berhasil mengajukan transaksi penyewaan, memperbarui status transaksi, dan menyimpan data pembayaran DP ke dalam database. Transaksi yang telah diajukan selanjutnya menunggu persetujuan admin.
