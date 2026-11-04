@@ -63,3 +63,19 @@ Tampilan tombol disesuaikan dengan kondisi kendaraan dan status login penyewa, y
 Setelah perubahan dilakukan, saya menguji halaman detail kendaraan melalui localhost untuk memastikan tampilan dan kondisi tombol sudah sesuai dengan ketentuan modul.
 
 Pada tahap ini, pengujian difokuskan pada tampilan dan kondisi tombol. Proses pengiriman formulir dan penyimpanan transaksi akan diuji setelah Controller dan Model terintegrasi.
+
+### C.2. Mengubah Tombol Tambah ke Keranjang pada Halaman Katalog
+
+Pada tahap ini, saya melakukan perubahan pada file `application/views/katalog/index.php`, khususnya pada bagian tombol Tambah ke Keranjang di dalam perulangan `foreach ($daftarMobil as $mobil)`.
+
+Perubahan dilakukan agar tombol menyesuaikan status kendaraan dan status login penyewa, dengan kondisi sebagai berikut:
+
+1. Jika kendaraan tersedia dan penyewa sudah login, tombol Tambah ke Keranjang aktif dan dapat digunakan.
+2. Jika kendaraan tersedia tetapi penyewa belum login, tombol Tambah ke Keranjang ditampilkan dalam keadaan nonaktif.
+3. Jika kendaraan tidak tersedia, tombol diganti menjadi Tidak Dapat Disewa dan ditampilkan dalam keadaan nonaktif.
+
+Formulir menggunakan metode POST dan diarahkan ke route `transaksi/tambah`. Data nomor kendaraan dikirim melalui input `no_plat`, sedangkan `return_to` menggunakan nilai `katalog` agar sistem mengetahui bahwa penambahan kendaraan dilakukan dari halaman katalog.
+
+Pengujian dilakukan dengan membuka halaman katalog melalui localhost dan memeriksa kondisi tombol saat belum login, setelah login sebagai penyewa, serta ketika kendaraan berstatus tidak tersedia.
+
+Pada tahap ini, pengujian hanya difokuskan pada tampilan dan kondisi tombol. Proses pengiriman formulir dan penyimpanan transaksi akan diuji setelah Controller dan Model terintegrasi.
