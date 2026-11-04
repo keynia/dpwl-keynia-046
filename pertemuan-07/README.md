@@ -34,3 +34,17 @@ Selain itu, terdapat beberapa method pendukung, yaitu:
 4. `pesanBisnisAman()` untuk mengatur pesan kesalahan agar informasi yang ditampilkan kepada pengguna tetap aman.
 
 Dengan adanya Controller ini, proses permintaan penambahan kendaraan ke keranjang dapat ditangani dan dihubungkan dengan Model transaksi.
+
+### B.3. Menambahkan Route Transaksi
+
+Pada tahap ini, saya menambahkan route transaksi pada file `routes.php` yang berada di dalam folder `application/config/`. Route ini digunakan untuk menghubungkan URL `transaksi/tambah` dengan method `tambah()` yang terdapat pada `Transaksi_controller`.
+
+Route yang ditambahkan adalah:
+
+`$route['transaksi/tambah'] = 'Transaksi_controller/tambah';`
+
+Route tersebut berfungsi untuk mengarahkan permintaan dari formulir penambahan kendaraan ke Controller transaksi. Method tambah() akan menerima permintaan menggunakan metode POST untuk memproses data kendaraan yang akan dimasukkan ke keranjang.
+
+Pada tahap ini, perubahan hanya dilakukan dengan menambahkan route transaksi tanpa menghapus route yang sudah tersedia. Formulir pada halaman katalog dan detail kendaraan belum diintegrasikan sehingga fitur tambah ke keranjang belum dapat diuji secara fungsional.
+
+Dengan adanya route ini, aplikasi sudah memiliki jalur akses untuk menghubungkan formulir penambahan kendaraan dengan Controller transaksi.
