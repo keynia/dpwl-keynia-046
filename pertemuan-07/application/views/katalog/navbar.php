@@ -1,10 +1,19 @@
 <?php
 $isPenyewaLogin = !empty($_SESSION['penyewa_user_plg']);
+
 $flashPenyewaNav = $_SESSION['flash_penyewa_nav'] ?? null;
 unset($_SESSION['flash_penyewa_nav']);
+
 $e = static function ($value): string {
-return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
+    return htmlspecialchars((string) $value, ENT_QUOTES, 'UTF-8');
 };
+
+// P7: menghitung jumlah mobil di keranjang penyewa
+$jumlahKeranjang = (int) ($jumlahKeranjang ?? 0);
+
+// P7: menampilkan flash message untuk katalog
+$flashKatalog = $_SESSION['flash_transaksi'] ?? null;
+unset($_SESSION['flash_transaksi']);
 ?>
 <!-- Start Top Nav -->
 <nav class="navbar navbar-expand-lg bg-dark navbar-light d-none d-lg-block" id="templatemo_nav_top">
@@ -96,9 +105,10 @@ Logout
 <i class="fa fa-fw fa-search text-dark mr-2"></i>
 </a>
 <?php if ($isPenyewaLogin): ?>
-<a class="nav-icon position-relative text-decoration-none" href="#">
+<a class="nav-icon position-relative text-decoration-none" href="<?=
+$e(site_url('transaksi/keranjang')) ?>" aria-label="Keranjang, <?= $jumlahKeranjang ?> kendaraan">
 <i class="fa fa-fw fa-cart-arrow-down text-dark mr-1"></i>
-<span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bglight text-dark">7</span>
+<span class="position-absolute top-0 left-100 translate-middle badge rounded-pill bglight text-dark"><?= $jumlahKeranjang ?></span>
 </a>
 <!-- Ikon Profil Penyewa -->
 <a
@@ -122,6 +132,18 @@ aria-label="Profil Saya">
 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
 </div>
 </div>
+</div>
+<?php endif; ?>
+<?php if (is_array($flashKatalog) && !empty($flashKatalog['message'])): ?>
+<div class="alert alert-<?= $e(
+($flashKatalog['type'] ?? '') === 'success' ? 'success' : 'danger'
+) ?> alert-dismissible fade show m-3" role="alert">
+<?= $e($flashKatalog['message']) ?>
+<button
+type="button"
+class="btn-close"
+data-bs-dismiss="alert"
+aria-label="Tutup"></button>
 </div>
 <?php endif; ?>
 <!-- Modal -->

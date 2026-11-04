@@ -79,3 +79,22 @@ Formulir menggunakan metode POST dan diarahkan ke route `transaksi/tambah`. Data
 Pengujian dilakukan dengan membuka halaman katalog melalui localhost dan memeriksa kondisi tombol saat belum login, setelah login sebagai penyewa, serta ketika kendaraan berstatus tidak tersedia.
 
 Pada tahap ini, pengujian hanya difokuskan pada tampilan dan kondisi tombol. Proses pengiriman formulir dan penyimpanan transaksi akan diuji setelah Controller dan Model terintegrasi.
+
+### D.1. Mengubah application/views/katalog/navbar.php
+
+Pada tahap ini, saya melakukan perubahan pada file `application/views/katalog/navbar.php` untuk menambahkan pesan notifikasi dan tautan menuju halaman keranjang pada navbar penyewa.
+
+Perubahan yang dilakukan meliputi:
+
+1. Menambahkan pengecekan status login penyewa untuk mengetahui apakah penyewa sudah login.
+2. Menambahkan pengambilan pesan notifikasi dari session agar pesan dapat ditampilkan setelah penyewa melakukan suatu tindakan.
+3. Menambahkan variabel `$jumlahKeranjang` untuk menyiapkan jumlah kendaraan yang ada di dalam keranjang.
+4. Menambahkan notifikasi transaksi yang dapat ditampilkan dan ditutup oleh pengguna.
+5. Mengubah tautan ikon keranjang agar mengarah ke halaman `transaksi/keranjang`.
+6. Mengubah angka pada ikon keranjang agar menampilkan nilai dari variabel `$jumlahKeranjang`, bukan angka tetap.
+
+Setelah perubahan selesai, saya melakukan pengujian melalui localhost dengan membuka halaman katalog, memeriksa tampilan navbar, memastikan pesan notifikasi dapat ditampilkan dan ditutup, serta memastikan ikon keranjang mengarah ke halaman keranjang.
+
+Pada tahap ini, pengujian jumlah kendaraan dalam keranjang belum dilakukan karena masih membutuhkan integrasi Model dan Controller pada tahap D.2.
+
+Dengan perubahan ini, navbar sudah memiliki fitur notifikasi dan tautan menuju halaman keranjang yang dapat digunakan oleh penyewa.
