@@ -208,15 +208,67 @@ ENT_QUOTES,
 'UTF-8'
 )) ?>
 </p>
-<form action="" method="GET">
-<input type="hidden" name="product-title" value="Activewear">
-<div class="row pb-3">
-<div class="col d-grid">
-<button type="submit" class="btn btn-success btn-lg" name="submit"
-value="addtocard">Add To Cart</button>
+<?php if (!$statusTersedia): ?>
+<div class="alert alert-secondary" role="status">
+Kendaraan ini tidak dapat ditambahkan ke keranjang
+karena statusnya tidak tersedia.
 </div>
+<?php elseif (empty($_SESSION['penyewa_user_plg'])): ?>
+<div class="alert alert-info" role="status">
+Silakan login sebagai penyewa atau registrasi akun
+terlebih dahulu untuk menambahkan kendaraan ke keranjang.
+</div>
+<div class="row g-2 pb-3">
+<div class="col-md-6 d-grid">
+<a
+href="<?= htmlspecialchars(
+site_url('auth/login-penyewa'),
+ENT_QUOTES,
+'UTF-8'
+) ?>"
+class="btn btn-success btn-lg">
+Login Penyewa
+</a>
+</div>
+<div class="col-md-6 d-grid">
+<a
+href="<?= htmlspecialchars(
+site_url('auth/register'),
+ENT_QUOTES,
+'UTF-8'
+) ?>"
+class="btn btn-outline-success btn-lg">
+Registrasi
+</a>
+</div>
+</div>
+<?php else: ?>
+<form
+action="<?= htmlspecialchars(
+site_url('transaksi/tambah'),
+ENT_QUOTES,
+'UTF-8'
+) ?>"
+method="POST">
+<input
+type="hidden"
+name="no_plat"
+value="<?= htmlspecialchars(
+(string) ($mobil['no_plat'] ?? ''),
+ENT_QUOTES,
+'UTF-8'
+) ?>">
+<input
+type="hidden"
+name="return_to"
+value="detail">
+<div class="d-grid pb-3">
+<button type="submit" class="btn btn-success btn-lg">
+Tambah ke Keranjang
+</button>
 </div>
 </form>
+<?php endif; ?>
 </div>
 </div>
 </div>

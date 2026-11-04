@@ -48,3 +48,18 @@ Route tersebut berfungsi untuk mengarahkan permintaan dari formulir penambahan k
 Pada tahap ini, perubahan hanya dilakukan dengan menambahkan route transaksi tanpa menghapus route yang sudah tersedia. Formulir pada halaman katalog dan detail kendaraan belum diintegrasikan sehingga fitur tambah ke keranjang belum dapat diuji secara fungsional.
 
 Dengan adanya route ini, aplikasi sudah memiliki jalur akses untuk menghubungkan formulir penambahan kendaraan dengan Controller transaksi.
+
+### C.1. Mengubah Formulir pada application/views/katalog/detail.php
+
+Pada tahap ini, saya mengubah formulir Add To Cart pada halaman detail kendaraan di file application/views/katalog/detail.php. Formulir yang sebelumnya menggunakan metode GET diganti menjadi metode POST dan diarahkan ke route transaksi/tambah.
+
+Formulir tersebut mengirimkan nomor kendaraan melalui input no_plat dan menggunakan return_to dengan nilai detail agar sistem mengetahui bahwa penambahan kendaraan dilakukan dari halaman detail.
+
+Tampilan tombol disesuaikan dengan kondisi kendaraan dan status login penyewa, yaitu:
+1. Jika kendaraan tidak tersedia, sistem menampilkan pesan bahwa kendaraan tidak dapat ditambahkan ke keranjang.
+2. Jika penyewa belum login, sistem menampilkan informasi untuk login atau registrasi, serta tombol Login Penyewa dan Registrasi.
+3. Jika penyewa sudah login dan kendaraan tersedia, sistem menampilkan tombol Tambah ke Keranjang.
+
+Setelah perubahan dilakukan, saya menguji halaman detail kendaraan melalui localhost untuk memastikan tampilan dan kondisi tombol sudah sesuai dengan ketentuan modul.
+
+Pada tahap ini, pengujian difokuskan pada tampilan dan kondisi tombol. Proses pengiriman formulir dan penyimpanan transaksi akan diuji setelah Controller dan Model terintegrasi.
