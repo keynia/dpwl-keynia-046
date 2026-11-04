@@ -116,3 +116,22 @@ Jumlah keranjang dihitung berdasarkan akun penyewa yang sedang login. Jika penye
 Setelah perubahan selesai, pengujian dilakukan melalui browser dengan membuka halaman katalog dan detail kendaraan. Pengujian juga dilakukan sebelum dan sesudah login sebagai penyewa untuk memastikan navbar menampilkan jumlah keranjang sesuai akun yang digunakan.
 
 Dengan perubahan ini, halaman katalog dan detail kendaraan sudah dapat menerima data jumlah keranjang dari Model transaksi melalui Controller katalog sehingga jumlah tersebut dapat ditampilkan pada navbar.
+
+### D.2.3. Memperbarui application/controllers/Penyewa_controller.php
+
+Pada tahap ini, saya melakukan perubahan pada file `application/controllers/Penyewa_controller.php` agar jumlah kendaraan yang ada di dalam keranjang dapat ditampilkan pada navbar ketika penyewa membuka halaman profil.
+
+Perubahan yang dilakukan meliputi:
+
+1. Menambahkan pemanggilan file `Transaksi_model.php` agar Controller penyewa dapat menggunakan Model transaksi.
+2. Menambahkan properti `$transaksiModel` di dalam class `Penyewa_controller`.
+3. Menambahkan inisialisasi objek `Transaksi_model` pada method `__construct()`.
+4. Memperbarui method `profil()` agar menghitung jumlah kendaraan dalam keranjang dan mengirimkan data `jumlahKeranjang` ke View profil.
+5. Menambahkan data `jumlahKeranjang` pada tampilan profil ketika validasi formulir gagal, sehingga jumlah keranjang tetap ditampilkan meskipun terdapat pesan kesalahan.
+6. Memperbarui method `renderProfilError()` agar tetap mengirimkan jumlah keranjang ketika halaman profil menampilkan pesan error.
+
+Jumlah kendaraan dalam keranjang dihitung berdasarkan akun penyewa yang sedang login. Dengan demikian, jumlah keranjang yang ditampilkan pada halaman profil sesuai dengan keranjang milik akun tersebut.
+
+Setelah perubahan selesai, pengujian dilakukan melalui browser dengan login sebagai penyewa, kemudian membuka halaman profil. Pengujian juga dilakukan dengan mengubah data profil menggunakan data valid dan tidak valid untuk memastikan jumlah keranjang tetap tampil meskipun terjadi kesalahan validasi.
+
+Dengan perubahan ini, navbar pada halaman profil penyewa sudah dapat menampilkan jumlah kendaraan dalam keranjang, sehingga jumlah keranjang dapat ditampilkan secara konsisten pada halaman katalog, detail kendaraan, dan profil penyewa.
