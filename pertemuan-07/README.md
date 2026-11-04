@@ -162,3 +162,30 @@ Setelah perubahan selesai, pengujian dilakukan melalui localhost dengan langkah-
 6. Mencoba menambahkan kendaraan yang sama kembali untuk memastikan sistem menolak data duplikat.
 
 Dengan tahap ini, fitur penambahan kendaraan ke keranjang sudah terintegrasi dengan Model transaksi dan database, sehingga kendaraan yang dipilih penyewa dapat disimpan sebagai bagian dari transaksi penyewaan.
+
+### F.1. Membuat Halaman Isi Keranjang
+
+Pada tahap ini, saya membuat file `application/views/transaksi/keranjang.php` untuk menampilkan halaman keranjang penyewaan kendaraan. Halaman ini digunakan oleh penyewa untuk memeriksa kendaraan yang sudah dipilih sebelum mengajukan transaksi kepada admin.
+
+Halaman keranjang menampilkan beberapa informasi, yaitu:
+
+1. Kode transaksi dan status penyewaan.
+2. Tanggal mulai dan tanggal selesai penyewaan.
+3. Waktu pengambilan kendaraan.
+4. Daftar kendaraan yang sudah dimasukkan ke keranjang.
+5. Nomor polisi dan harga sewa setiap kendaraan.
+6. Durasi penyewaan dan subtotal setiap kendaraan.
+7. Total biaya penyewaan.
+
+Selain menampilkan informasi transaksi, halaman ini juga menyediakan beberapa fitur, yaitu:
+
+1. Tombol Update Keranjang untuk memperbarui tanggal dan waktu penyewaan.
+2. Tombol Hapus untuk mengeluarkan kendaraan dari keranjang.
+3. Tombol Lanjut Pilih Kendaraan untuk kembali ke halaman katalog.
+4. Tombol Checkout / Lihat Konfirmasi untuk melanjutkan proses pengajuan transaksi.
+
+Halaman ini juga dilengkapi dengan pesan notifikasi apabila terdapat proses yang berhasil atau mengalami kesalahan. Jika keranjang masih kosong, sistem akan menampilkan pesan bahwa belum ada kendaraan yang dipilih.
+
+Untuk pengaturan periode sewa, sistem memberikan batas waktu pengambilan minimal dua jam dari waktu sekarang dan tanggal selesai harus setelah tanggal mulai. Data yang ditampilkan juga diamankan menggunakan `htmlspecialchars()` agar lebih aman ketika ditampilkan pada halaman.
+
+Dengan dibuatnya halaman ini, penyewa dapat melihat isi keranjang, memeriksa biaya sewa, memperbarui periode penyewaan, menghapus kendaraan, dan melanjutkan ke proses checkout.
