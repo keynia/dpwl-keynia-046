@@ -41,3 +41,9 @@ $route['transaksi/hapus'] = 'Transaksi_controller/hapus';
 $route['transaksi/hapus/(:any)'] = 'Transaksi_controller/hapus/$1';
 $route['transaksi/checkout'] = 'Transaksi_controller/checkout';
 
+// Route UTS - Manajemen Penyewa
+$route['admin/penyewa'] = 'Penyewa_controller/index';
+$route['admin/penyewa/tambah'] = 'Penyewa_controller/tambah';
+$route['admin/penyewa/ubah/(:any)'] = 'Penyewa_controller/ubah/$1';
+$route['admin/penyewa/hapus/(:any)'] = 'Penyewa_controller/hapus/$1';
+
